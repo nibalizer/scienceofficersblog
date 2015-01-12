@@ -1,8 +1,9 @@
 <!doctype html>
-<!-- CC BY 3.0 -->
-<html>
+<html lang=en>
 <head>
 <!-- Latest compiled and minified CSS -->
+<!-- CC BY 3.0 -->
+<meta charset="utf-8">
 <script type="text/javascript">
 //<![CDATA[
 try{if (!window.CloudFlare) {var CloudFlare=[{verbose:0,p:0,byc:0,owlid:"cf",bag2:1,mirage2:0,oracle:0,paths:{cloudflare:"/cdn-cgi/nexp/dok2v=1613a3a185/"},atok:"7abb2e00dad6c83b7575948d8de20ca0",petok:"183412a488dbaa3ff173e1b4e6186ecd7b497845-1421035951-1800",zone:"spencerkrum.com",rocket:"0",apps:{}}];CloudFlare.push({"apps":{"ape":"1543713da7f4a0f968cf42fac16a6383"}});!function(a,b){a=document.createElement("script"),b=document.getElementsByTagName("script")[0],a.async=!0,a.src="//ajax.cloudflare.com/cdn-cgi/nexp/dok2v=919620257c/cloudflare.min.js",b.parentNode.insertBefore(a,b)}()}}catch(e){};
@@ -21,18 +22,55 @@ try{if (!window.CloudFlare) {var CloudFlare=[{verbose:0,p:0,byc:0,owlid:"cf",bag
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
 </style>
-<title>Science Officer's Blog</title>
+<title>SSH Log analysis</title>
 
 </head>
 <body>
 <h1>Science Officer's Blog</h1>
 <h2>By Spencer Krum</h2>
-<ul>
-    <li><a href=ssh_log_analysis.html>SSH Log Analysis</a></li>
-</ul>
+<!--col-xs-6 col-centered -->
 
-<img src=cc.png>
+<div class="container">
+<div class="page-header">
+<div class="panel panel-default">
+  <div class="panel-body ">
+    Sun Jan 11 20:47:28 PST 2015
+    <br>
+    Today we will analyze ssh logs on a server on the open internet. These connections generally fall into two categories, successful logins from legitimate users, and failed logins from attempted ssh brute force attacks. We will provide no information on the successful logins and will provide high level analysis of the unsuccesful logins.
+    <br>
+  </div>
+</div>
+</div>
+</div>
+
+
+<!--    <img src=cc.png width=201 height=70> -->
+
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted"><img src=cc.png width=87 height=30>  © Spencer Krum. Released under the Creative Commons CC-BY Liscense </p>
+  </div>
+</footer>
+
 </body>
 </html>
 
