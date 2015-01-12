@@ -45,7 +45,7 @@ body {
 
 </head>
 <body>
-<h1>Science Officer's Blog</h1>
+<h1>Science Officer's Blog: SSH Log Analysis</h1>
 <h2>By Spencer Krum</h2>
 <!--col-xs-6 col-centered -->
 
@@ -57,6 +57,100 @@ body {
     <br>
     Today we will analyze ssh logs on a server on the open internet. These connections generally fall into two categories, successful logins from legitimate users, and failed logins from attempted ssh brute force attacks. We will provide no information on the successful logins and will provide high level analysis of the unsuccesful logins.
     <br>
+    <br>
+    Basic stats:
+    <ul>
+        <li>First log event: Jan 11 03:53:39</li>
+        <li>Last log event: Jan 12 05:41:32</li>
+        <li>Total log lines: 44853</li>
+        <li>OS Version: Centos 6.5</li>
+        <li>sshd: Version     : 5.3p1 (from yum)</li>
+        <li>sshd: Release     : 104.el6_6.1 (from yum)</li>
+    </ul>
+    <br>
+    Light analysis:
+    <ul>
+        <li>Failed password authentication for root: 22199</li>
+        <li>Failed password for other users: 209</li>
+        <li>Other users:
+    <ul>
+        <li>admin</li>
+        <li>appcadmin</li>
+        <li>arun</li>
+        <li>binbin</li>
+        <li>dasusr1</li>
+        <li>db2fenc1</li>
+        <li>db2fenc2</li>
+        <li>edx</li>
+        <li>elbarassin</li>
+        <li>evanss</li>
+        <li>galbatorix</li>
+        <li>ghost</li>
+        <li>gusr</li>
+        <li>hadoop</li>
+        <li>ham</li>
+        <li>icang</li>
+        <li>info</li>
+        <li>kang</li>
+        <li>kenny</li>
+        <li>kjclub</li>
+        <li>klindley</li>
+        <li>mrlong</li>
+        <li>solr</li>
+        <li>tansya</li>
+        <li>tester</li>
+        <li>ubnt</li>
+        <li>vagrant</li>
+    </ul></li>
+</ul>
+    Some of these users are quite interesting. 'admin' is of course a classic, as are 'info' and 'tester'. But 'hadoop', 'vagrant', and 'solr'  are relatively new technologies and it is both scary and encouraging that the brute force bots are attempting to compromise those users. 'galbatorix' has to be my favorite name in this list, just because it is hillarious. 'binbin' is a close second. I'm also suprised to find attempts at mispelled user names such as 'icang' (probably a mispelling of icinga) and 'ubnt' (probably a mispelling of ubuntu). I'm not sure if this is because the bots have mispellings from incompetent operators, or if this is an attempt to gain access through an accidentaly created user. I can totally see how an admin setting up a service would mistype 'adduser icang' and then run 'adduser icinga' without cleaning up after themself.
+
+
+    Next, lets look at the attackers:
+<ul>
+   <li>7749 103.41.124.59</li>
+   <li>3931 144.0.0.60</li>
+   <li>2247 62.210.180.180</li>
+   <li>2247 115.239.228.4</li>
+   <li>1992 62.210.180.207</li>
+   <li>1698 115.231.222.45</li>
+    <li>406 62.210.142.105</li>
+    <li>344 122.225.109.117</li>
+    <li>272 122.225.109.219</li>
+    <li>191 61.174.51.220</li>
+    <li>189 61.174.51.221</li>
+    <li>186 61.174.51.216</li>
+    <li>143 122.225.97.79</li>
+    <li>140 62.210.82.138</li>
+    <li>115 62.210.140.121</li>
+    <li>101 62.210.84.132</li>
+     <li>95 62.210.82.85</li>
+     <li>87 62.210.140.129</li>
+     <li>22 62.210.82.152</li>
+     <li>16 211.100.70.54</li>
+      <li>9 122.225.97.71</li>
+      <li>5 117.21.191.46</li>
+      <li>1 87.106.73.53</li>
+      <li>1 87.106.18.230</li>
+      <li>1 85.95.246.191</li>
+      <li>1 85.95.227.153</li>
+      <li>1 70.33.231.36</li>
+      <li>1 62.14.247.220</li>
+      <li>1 61.135.223.212</li>
+      <li>1 24.103.181.180</li>
+      <li>1 222.42.146.175</li>
+      <li>1 219.153.15.122</li>
+      <li>1 217.160.135.104</li>
+      <li>1 210.46.81.49</li>
+      <li>1 202.71.103.169</li>
+      <li>1 173.8.160.24</li>
+</ul>
+This tells us more or less what we expect. We have two kinds of attacks going on. One kind of attack will brute force passwords against a single server until its database is exhausted, another kind will try a single password against its list of servers, before circling around and trying a second password. This second kind is more sophisticated because it hides from tools like fail2ban.
+
+<br>
+<br>
+Conclusion: I should really turn off password auth on this server. Keys only is the way to go, still, it is impressive that 43K attempts were made in about 24 hours. It is interesting that despite this server having ipv6, no brute force attacks have been made over ipv6. This is likely due to the big-sky problem, which may be a topic for an upcomming post. It is also interesting that root accounts for almost all of the brute force attacks and regular users are very few. It is worth noting that the analysis could be performed over a longer period, data from a week or a month or more may provide more results.
+
   </div>
 </div>
 </div>
