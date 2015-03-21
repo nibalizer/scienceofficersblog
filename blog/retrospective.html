@@ -72,24 +72,15 @@ body {
     <div class="panel-heading"> Thu Mar 19 00:57:25 PDT 2015</div>
   <div class="panel-body ">
     <br>
-    When your browser connects to an https website, it attempts to verify the authenticity of the source. When it can't verify the authenticity of the source you get that 'This Connection is Untrusted' error. See below
+    Over the last several weeks I have made several security related postings. This blog post will look at what topics I covered, and see if any patterns emerge.
     <br>
-    <img src="images/firefox_cert_untrusted.png" width="800" height="500">
+    One obvious pattern is that I chose to talk about things only in the context of free and open source software. Nothing I talked about in my blog had anything to do with windows, orcale, apple or other proprietary vendors. I also stayed away from software as a service vendors such as google docs and amazon web services. I chose this because this is how I live my life. I will always try to use free software that I control before I will give up control to someone else, or use software that is nonfree.
     <br>
-    Which sites are considered 'trusted'?
+    Most of the material I used for these posts came from seeds in my own experience. Then I went on an exploratory journey, checking and investigating, doing science, then reporting back. Firefox certs came from me having to modify my certificate trust system for work. Ssh analysis came from years of seeing hosts getting bruteforced.
     <br>
-    Most sites that are run by established companies are trusted. Examples are <a href="https://google.com">google</a>, <a href="https://twitter.com">twitter</a>, and <a href="https://facebook.com">facebook</a>.
+    This blog is going to be useful for Unix hackers interested in light security topics. Digging into the internals of firefox's cert store and setting up ssh honeypots are exactly the kind of things that Unix/Linux system administrators work with. They don't do them every day, so they need a refreence, and this blog can be that reference.
     <br>
-    The mechanism that decides which websites are 'trusted' and which ones are not is the certificate authority system. A full analysis and explanation of that system is beyond my ability to speak with authority on. But a component of it is that your computer stores a list of root certificates that are trusted. Any certificate presented by a website is checked against this list, and if not found to be signed by one of the "trusted certs", it is rejected. 
-    <br>
-    This means that the list of trusted root certificates is important. Firefox manages its own database of certificates, it does not trust the local computer to have a good list. Let's see what certificates are trusted by firefox.
-    <br>
-    <img src="images/firefox_certs.png" width="800" height="500">
-    <br>
-    As you can see, there are a ton of certs there from a lot of places it doesn't make sense necessarily to trust by default. A huge problem in the SSL/CA space is that if any one of the organizations holding these certs is compromised, bought, or otherwise decides to be nasty, any site/user combo can be man-in-the-middle'd.
-    <br>
-    As an experiment, I'm going to remove a few of these from my browser. If I need to check a cert to see if it is trusted by default in firefox, I can launch a window under a different profile which will still have an unchanged trust chain. I'll report back in a week with what I was able to delete and what worked and what didn't.
-    <br>
+    For those comming in after me, I'd look deeper into replacing kippo with something custom written, such as a docker tooling system. I'd also create my own Root CA and add that to the firefox trust chain and then see how much fun I can have.
 
   </div>
 </div>
